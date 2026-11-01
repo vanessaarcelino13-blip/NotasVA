@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#17151d"><meta name="description" content="NotasVA — suas ideias, do seu jeito.">
+<meta name="theme-color" content="#17151d"><link rel="manifest" href="./manifest.webmanifest"><meta name="description" content="NotasVA — suas ideias, do seu jeito.">
 <title>NotasVA</title>
 <style>
 :root{--bg:#f4f1f8;--panel:#fff;--ink:#282431;--muted:#777181;--accent:#7957c8;--line:#e8e3ef}
@@ -47,6 +47,6 @@ $('clear').onclick=()=>{if(!current)return;if(confirm('Apagar todos os traços d
 $('delete').onclick=()=>{if(!current||!confirm('Excluir esta nota?'))return;notes=notes.filter(n=>n.id!==current.id);if(!notes.length)notes.push(blank());selectNote(notes[notes.length-1]);persist()};
 $('export').onclick=()=>{const blob=new Blob([$('title').value+'\n\n'+$('writing').innerText],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=($('title').value||'nota')+'.txt';a.click();URL.revokeObjectURL(a.href)};
 $('menu').onclick=()=>$('sidebar').classList.toggle('open');
-if(!notes.length)notes=[blank()];selectNote(notes[notes.length-1]);renderList();setMode('text');setTimeout(resize,80);window.addEventListener('resize',resize);
+if(!notes.length)notes=[blank()];selectNote(notes[notes.length-1]);renderList();setMode('text');setTimeout(resize,80);window.addEventListener('resize',resize);if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 })();
 </script></body></html>
