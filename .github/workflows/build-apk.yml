@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: Compilar APK Android
+    name: Testar interface e compilar APK Android
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -22,6 +22,8 @@ jobs:
           node-version: 20
       - name: Instalar dependências
         run: npm install
+      - name: Validar JavaScript e controles da interface
+        run: npm test
       - name: Preparar aplicação web
         run: npm run build
       - name: Configurar Java
