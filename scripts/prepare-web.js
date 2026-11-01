@@ -1,0 +1,1 @@
+const fs=require('fs');const path=require('path');const files=['index.html','manifest.webmanifest','sw.js','icon.svg'];fs.mkdirSync('www',{recursive:true});for(const file of files){if(fs.existsSync(file))fs.copyFileSync(file,path.join('www',file));}console.log('Arquivos web preparados em www/');
