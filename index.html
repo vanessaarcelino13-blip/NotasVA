@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#17151f">
 <meta name="description" content="NotasVA — escreva, desenhe e organize suas ideias.">
-<link rel="manifest" href="./manifest.webmanifest">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./dashboard.css">
 <title>NotasVA</title>
 <style>
 :root{color-scheme:light;--bg:#f4f2f7;--surface:#fff;--ink:#252230;--muted:#858091;--line:#e9e5ef;--accent:#7956cf;--accent2:#eee8fb;--dark:#211e2a;--shadow:0 12px 38px #21172b1c}
@@ -15,11 +15,15 @@
 </style>
 </head>
 <body>
-<div class="app">
+<section id="homeDashboard" class="home-dashboard">
+<aside class="home-rail"><div class="home-brand"><span class="brand-mark">N</span>Notas<span>VA</span></div><small>ESPAÇO DE TRABALHO</small><button class="rail-link active" data-home-filter="all">▦ &nbsp; Visão geral</button><button class="rail-link" data-home-filter="favorites">☆ &nbsp; Favoritos</button><button class="rail-link" data-home-filter="recent">◷ &nbsp; Recentes</button><small class="rail-create">CRIAR</small><button class="rail-link" id="homeNew">＋ &nbsp; Nova nota</button><button class="rail-link" id="homeDraw">✎ &nbsp; Estúdio de desenho</button><button class="rail-link" id="homePdf">▤ &nbsp; Anotar PDF</button><div class="rail-profile"><b>V</b><span>NotasVA<small>Seu espaço criativo</small></span></div></aside>
+<main class="home-content"><header class="home-heading"><div><small>SEU ESPAÇO CRIATIVO</small><h1>Suas ideias, <em>em movimento.</em></h1><p>Escreva, desenhe, estude e organize tudo em um só lugar.</p></div><button id="homeNewTop" class="home-primary">＋ Criar nota</button></header>
+<section class="home-hero"><div><small>UM LUGAR PARA CRIAR</small><h2>Transforme pensamentos<br>em algo extraordinário.</h2><p>Uma página em branco é só o começo.</p><button id="welcomeStart">Começar uma nota ↗</button></div><div class="hero-art"><div class="hero-orbit"></div><div class="hero-sheet"><b>✳</b><strong>IDEIAS</strong><small>rascunhos & planos</small><i></i></div><span>✦</span></div></section>
+<section class="home-library"><div class="library-head"><div><small>BIBLIOTECA</small><h2>Suas notas</h2></div><div class="library-tools"><label>⌕ <input id="homeSearch" placeholder="Buscar uma nota..."></label><button id="homeSort">Mais recentes⌄</button></div></div><nav class="home-filters"><button class="active" data-home-filter="all">Todas</button><button data-home-filter="favorites">Favoritas</button><button data-home-filter="recent">Recentes</button></nav><div id="homeNotesGrid" class="home-notes-grid"></div><div id="homeEmpty" class="home-empty" hidden><b>✧</b><h3>Seu espaço está esperando por uma ideia.</h3><p>Crie sua primeira nota ou comece um desenho.</p><button id="emptyCreate">Criar primeira nota</button></div></section><footer class="home-footer">NotasVA · Feito para suas ideias <span>Seus arquivos ficam neste dispositivo.</span></footer></main></section><div class="app">
 <aside class="sidebar" id="sidebar"><div class="brand">Notas<span>VA</span></div><button class="new" id="newNote">＋ &nbsp; Nova nota</button><div class="search-box"><span>⌕</span><input id="noteSearch" placeholder="Buscar notas..." aria-label="Buscar notas"></div><button class="new" id="favoritesFilter" style="background:#302b3b;box-shadow:none;height:40px">☆ &nbsp; Mostrar favoritas</button><div class="side-heading">Minhas notas</div><div class="notes" id="notes"></div><div class="side-foot">Suas notas são salvas neste dispositivo.<br>NotasVA • Seu espaço criativo</div></aside>
 <div class="shade" id="shade"></div>
 <main class="main">
-<header class="topbar">
+<header class="topbar"><button class="icon-btn" id="homeBtn" title="Voltar ao início">⌂</button>
 <button class="icon-btn mobile-only" id="menuBtn" aria-label="Abrir notas">☰</button>
 <button class="icon-btn star-btn" id="favoriteBtn" title="Favoritar nota">☆</button><input class="title" id="title" value="Minha nota" aria-label="Título da nota">
 <span class="save" id="status">✓ Salvo</span>
@@ -108,7 +112,7 @@ $('deleteNote').addEventListener('click',()=>{if(!current||!confirm('Excluir est
 
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('.popup')&&!e.target.closest('#toolsBtn')&&!e.target.closest('#paperBtn')&&!e.target.closest('#layersBtn')&&!e.target.closest('#moreBtn'))closePopups()});
 window.addEventListener('resize',()=>{resizeCanvas();redraw()});
-window.NotasVA={getCurrent:()=>current,getNotes:()=>notes,save,redraw,};if(!notes.length)notes=[blank()];selectNote(notes[notes.length-1]);if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+window.NotasVA={getCurrent:()=>current,getNotes:()=>notes,save,redraw,selectNote,createNote,renderNotes,};if(!notes.length)notes=[blank()];selectNote(notes[notes.length-1]);if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 })();
 </script>
 
@@ -198,5 +202,5 @@ $('title').addEventListener('change',persist);window.addEventListener('notasva:s
 </style>
 <script src="./vendor/pdf.min.js"></script>
 <script src="./vendor/pdf-lib.min.js"></script>
-<script src="./pdf-tools.js"></script>
+<script src="./pdf-tools.js"></script><script src="./dashboard.js"></script>
 </body></html>
