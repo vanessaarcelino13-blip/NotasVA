@@ -1,5 +1,5 @@
-const CACHE='notasva-v6-pdf';
-const FILES=['./','./index.html','./manifest.webmanifest','./icon.svg','./pdf-tools.js','./vendor/pdf.min.js','./vendor/pdf.worker.min.js','./vendor/pdf-lib.min.js'];
+const CACHE='notasva-v7-redesign';
+const FILES=['./','./index.html','./manifest.webmanifest','./icon.svg','./pdf-tools.js','./dashboard.css','./dashboard.js','./vendor/pdf.min.js','./vendor/pdf.worker.min.js','./vendor/pdf-lib.min.js'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
