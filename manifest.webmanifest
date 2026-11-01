@@ -1,18 +1,13 @@
 {
   "name": "NotasVA",
   "short_name": "NotasVA",
-  "description": "Anotações, escrita à mão e desenho.",
+  "description": "Escreva, desenhe e organize suas ideias.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f1f8",
-  "theme_color": "#211e29",
+  "orientation": "any",
+  "background_color": "#f4f2f7",
+  "theme_color": "#17151f",
   "lang": "pt-BR",
-  "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+  "icons": [{"src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
 }

@@ -1,0 +1,66 @@
+/* NotasVA 5.0 — refinamento visual sem alterar o fluxo conhecido da versão 4.1 */
+:root {
+  --accent: #7654c8;
+  --accent2: #f0eafd;
+  --shadow: 0 18px 48px rgba(34, 24, 52, .13);
+}
+body { background: #f0edf5; }
+.sidebar {
+  background: linear-gradient(165deg, #211d2b 0%, #30263f 100%);
+  padding: 22px 15px;
+}
+.brand { letter-spacing: -.9px; }
+.new { border-radius: 15px; transition: transform .16s, box-shadow .16s, filter .16s; }
+.new:hover { transform: translateY(-1px); filter: brightness(1.06); }
+.topbar {
+  background: rgba(255,255,255,.94);
+  backdrop-filter: blur(14px);
+  padding-inline: clamp(10px, 2vw, 24px);
+}
+.icon-btn { transition: background .16s, color .16s, transform .16s; }
+.icon-btn:active, .tool-main:active { transform: scale(.95); }
+.title { letter-spacing: -.35px; }
+.editor-area {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(126, 94, 188, .08), transparent 55%),
+    #f0edf5;
+}
+.paper {
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(35,25,48,.05), 0 24px 60px rgba(35,25,48,.12);
+  transition: box-shadow .2s;
+}
+.paper:focus-within { box-shadow: 0 3px 10px rgba(35,25,48,.05), 0 26px 68px rgba(67,45,105,.16); }
+.writing { line-height: 1.9; }
+.floating-tools {
+  background: rgba(34, 30, 43, .96);
+  border: 1px solid rgba(255,255,255,.1);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 16px 42px rgba(24,18,34,.28);
+}
+.tool-main { border-radius: 13px; transition: background .16s, transform .16s; }
+.tool-main:hover { background: rgba(255,255,255,.1); }
+.tool-main.active { background: #654b99; }
+.popup, .tags-drawer {
+  border-radius: 19px;
+  border-color: rgba(92,72,126,.12);
+  box-shadow: 0 18px 54px rgba(34,24,52,.2);
+}
+.popup button { transition: background .14s, transform .14s; }
+.popup button:active { transform: scale(.985); }
+.layer-card { transition: border-color .15s, background .15s; }
+.note-item { transition: background .15s, transform .15s; }
+.note-item:hover { background: rgba(255,255,255,.09); }
+.note-item.active { box-shadow: inset 3px 0 #bda5f2; }
+.bottom-bar { background: rgba(255,255,255,.94); }
+.toast { border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(12px); }
+@media(max-width:760px) {
+  .sidebar { padding-top: max(20px, env(safe-area-inset-top)); }
+  .editor-area { padding-bottom: calc(105px + env(safe-area-inset-bottom)); }
+  .floating-tools { bottom: calc(55px + env(safe-area-inset-bottom)); }
+  .bottom-bar { padding-bottom: env(safe-area-inset-bottom); }
+  .paper { border-radius: 7px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}

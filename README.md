@@ -1,32 +1,58 @@
-# NotasVA
+# NotasVA 5.0.0
 
-Aplicativo de anotações, escrita manual e desenho, otimizado para telas Android e desktop.
+Aplicativo de anotações, escrita manual e desenho, com interface responsiva para Android e desktop.
 
-## Recursos da interface v4.1
+## Recursos disponíveis
 
-- Criar, pesquisar, duplicar e excluir notas.
-- Salvamento local automático.
-- Favoritar notas e organizar com etiquetas.
-- Texto editável e desenho por toque ou mouse.
-- Caneta, lápis, tinteiro, marca-texto e borracha.
-- Inserir e arrastar figurinhas, imagens, retângulos e setas.
-- Papéis branco, pautado, quadriculado, pontilhado, creme, escuro, azul técnico e kraft.
-- Desfazer e refazer ações em objetos.
-- Exportar notas em TXT ou PDF pela impressão.
-- Criar e restaurar backup JSON.
-- Cache atualizado para carregar a interface nova no dispositivo.
+- Criar, pesquisar, favoritar, duplicar e excluir notas.
+- Salvamento automático no armazenamento local do dispositivo.
+- Editor de texto com contador de caracteres.
+- Desenho por toque ou mouse: caneta, lápis, tinteiro, marca-texto e borracha.
+- Ferramentas de formas e setas.
+- Camadas com seleção, visibilidade e exclusão.
+- Inserção e movimentação de imagens e figurinhas.
+- Oito estilos de papel.
+- Desfazer e refazer ações de desenho e objetos.
+- Exportação TXT e impressão/Salvar como PDF.
+- Backup e restauração JSON.
+- Aplicativo web instalável e empacotamento Android com Capacitor 6.
 
 ## Executar no navegador
 
-Abra `index.html` em um navegador moderno.
+Requer Node.js 20 ou superior:
 
-## Gerar APK Android
+```bash
+npm install
+npm run dev
+```
 
-O GitHub Actions compila automaticamente o APK quando os arquivos da aplicação são atualizados na branch `main`.
+## Gerar APK localmente
 
-1. Abra a aba **Actions** do repositório.
-2. Entre na execução **Gerar APK do NotasVA**.
-3. Aguarde a conclusão da compilação.
-4. Baixe o artefato **NotasVA-APK** na seção Artifacts.
+Requer Java 17 e Android SDK:
 
-O projeto usa Capacitor com o identificador Android `br.com.notasva.app`.
+```bash
+npm install
+npm run build
+npx cap add android
+npx cap sync android
+cd android
+./gradlew assembleDebug
+```
+
+O APK de depuração será criado em `android/app/build/outputs/apk/debug/app-debug.apk`.
+
+## Gerar APK pelo GitHub
+
+A cada atualização na branch `main` ou `release/notasva-5.0.0`, o GitHub Actions compila o APK. Também é possível iniciar manualmente em **Actions → Gerar APK do NotasVA 5.0.0 → Run workflow**. Ao concluir, baixe o artefato **NotasVA-5.0.0-APK**.
+
+O APK gerado pelo workflow é uma versão de teste (debug), não uma versão assinada para publicação na Play Store.
+
+## Dados e privacidade
+
+As notas permanecem no armazenamento local do navegador/aplicativo. Faça backups JSON regularmente antes de reinstalar ou limpar os dados do aplicativo.
+
+Identificador Android: `br.com.notasva.app`.
+
+## Verificações automáticas
+
+Antes de compilar o APK, o fluxo executa `npm test`, que valida a sintaxe dos scripts JavaScript, IDs duplicados, referências a elementos da interface e a presença dos controles essenciais.
