@@ -1,0 +1,9 @@
+{
+  "appId": "br.com.notasva.app",
+  "appName": "NotasVA",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": false
+  }
+}
