@@ -13,6 +13,8 @@ Aplicativo de anotações, escrita manual e desenho, com foco em Android.
 - Papéis branco, pautado, quadriculado, pontilhado, creme, escuro, azul técnico e kraft.
 - Camadas de desenho.
 - Desfazer e refazer ações de desenho e objetos.
+- Importar arquivos PDF, navegar pelas páginas, anotar com caneta ou marca-texto, apagar e desfazer traços.
+- Exportar o PDF original com as anotações incorporadas em todas as páginas.
 - Exportar notas em TXT e imprimir/salvar em PDF.
 - Criar e restaurar backup JSON.
 
