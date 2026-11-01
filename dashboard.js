@@ -1,0 +1,15 @@
+(()=>{'use strict';const $=id=>document.getElementById(id),body=document.body;let filter='all',query='',newest=true;
+function notes(){return window.NotasVA?.getNotes?.()||[]}
+function render(){const host=$('homeNotesGrid'),empty=$('homeEmpty');if(!host)return;let list=notes().slice().reverse();if(filter==='favorites')list=list.filter(n=>n.favorite);if(filter==='recent')list=list.slice(0,6);if(query)list=list.filter(n=>((n.title||'')+' '+(n.text||'')).toLowerCase().includes(query));if(!newest)list.reverse();host.replaceChildren();list.forEach(n=>{const card=document.createElement('button');card.className='home-note-card';card.type='button';const top=document.createElement('div');top.className='note-card-top';const icon=document.createElement('span');icon.className='note-card-icon';icon.textContent=n.strokes?.length?'✎':'▤';const star=document.createElement('span');star.className='note-card-star';star.textContent=n.favorite?'★':'';top.append(icon,star);const title=document.createElement('strong');title.textContent=n.title||'Sem título';const preview=document.createElement('p');preview.textContent=(n.text||'Toque para continuar sua nota').slice(0,110);const foot=document.createElement('div');foot.className='note-card-bottom';const type=document.createElement('span');type.textContent=n.strokes?.length?'NOTA COM DESENHO':'ANOTAÇÃO';const chars=document.createElement('span');chars.textContent=(n.text||'').length+' caracteres';foot.append(type,chars);card.append(top,title,preview,foot);card.addEventListener('click',()=>open(n));host.append(card)});empty.hidden=list.length>0;host.hidden=list.length===0}
+function open(n){window.NotasVA.selectNote(n);body.classList.add('editor-open');window.scrollTo(0,0)}
+function create(){window.NotasVA.createNote();open(window.NotasVA.getCurrent())}
+document.querySelectorAll('[data-home-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.homeFilter;document.querySelectorAll('[data-home-filter]').forEach(x=>x.classList.toggle('active',x===b));render()}));
+['homeNew','homeNewTop','welcomeStart','emptyCreate'].forEach(id=>$(id)?.addEventListener('click',create));
+$('homeDraw').addEventListener('click',()=>{create();$('quickPen').click()});
+$('homePdf').addEventListener('click',()=>{create();$('pdfBtn').click()});
+$('homeSearch').addEventListener('input',e=>{query=e.target.value.toLowerCase().trim();render()});
+$('homeSort').addEventListener('click',()=>{newest=!newest;$('homeSort').textContent=newest?'Mais recentes⌄':'Mais antigas⌄';render()});
+$('homeBtn').addEventListener('click',()=>{window.NotasVA.save();body.classList.remove('editor-open');render()});
+const noteHost=$('notes');new MutationObserver(()=>{if(!body.classList.contains('editor-open'))render()}).observe(noteHost,{childList:true,subtree:true});
+window.addEventListener('notasva:select',()=>{if(!body.classList.contains('editor-open'))render()});render();
+})();
