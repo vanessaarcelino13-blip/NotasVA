@@ -1,8 +1,9 @@
 const fs = require('node:fs');
 const vm = require('node:vm');
 const html = fs.readFileSync('index.html', 'utf8');
+const markup = html.replace(/<script\b[\s\S]*?<\/script>/gi, '');
 
-const ids = [...html.matchAll(/\bid=["']([^"']+)["']/g)].map(m => m[1]);
+const ids = [...markup.matchAll(/\bid=["']([^"']+)["']/g)].map(m => m[1]);
 const duplicates = ids.filter((id, i) => ids.indexOf(id) !== i);
 if (duplicates.length) throw new Error('IDs duplicados: ' + [...new Set(duplicates)].join(', '));
 
