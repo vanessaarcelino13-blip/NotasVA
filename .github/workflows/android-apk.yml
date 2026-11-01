@@ -1,72 +1,63 @@
 name: Gerar APK do NotasVA
 
 on:
-  workflow_dispatch:
   push:
     branches: [main]
-    paths:
-      - 'index.html'
-      - 'index.html.gz.b64'
-      - 'manifest.webmanifest'
-      - 'sw.js'
-      - 'icon.svg'
-      - 'package.json'
-      - 'capacitor.config.json'
-      - 'scripts/**'
-      - '.github/workflows/android-apk.yml'
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: notasva-android-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
+    name: Compilar aplicativo Android
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Baixar o código
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
-      - name: Aplicar interface v4 enviada
-        run: |
-          if [ -f index.html.gz.b64 ]; then
-            cat .payload/notasva-v4-*.b64 | base64 -d | gzip -dc > index.html
-            rm -f index.html.gz.b64 .payload/notasva-v4-*.b64
-            sed -i "s/notasva-v2/notasva-v4/" sw.js
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add index.html index.html.gz.b64 sw.js .payload/
-            if ! git diff --cached --quiet; then
-              git commit -m "Atualiza interface NotasVA v4.1"
-              git push
-            fi
-          fi
+
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+
       - name: Configurar Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+
       - name: Instalar dependências
+        run: npm install
+
+      - name: Preparar arquivos do aplicativo
+        run: npm run build
+
+      - name: Criar projeto Android do Capacitor
+        run: npx cap add android
+
+      - name: Sincronizar aplicativo Android
+        run: npx cap sync android
+
+      - name: Compilar APK de depuração
+        working-directory: android
         run: |
-          npm install @capacitor/core@6.1.2 @capacitor/android@6.1.2
-          npm install --save-dev @capacitor/cli@6.1.2
-      - name: Preparar aplicativo
-        run: |
-          npm run build
-          npx cap add android
-          npx cap sync android
-      - name: Compilar APK
-        run: |
-          cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Renomear APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk NotasVA-debug.apk
+
       - name: Disponibilizar APK
         uses: actions/upload-artifact@v4
         with:
           name: NotasVA-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: NotasVA-debug.apk
           if-no-files-found: error
           retention-days: 30
