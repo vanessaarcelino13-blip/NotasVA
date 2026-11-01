@@ -52,3 +52,7 @@ O APK gerado pelo workflow é uma versão de teste (debug), não uma versão ass
 As notas permanecem no armazenamento local do navegador/aplicativo. Faça backups JSON regularmente antes de reinstalar ou limpar os dados do aplicativo.
 
 Identificador Android: `br.com.notasva.app`.
+
+## Verificações automáticas
+
+Antes de compilar o APK, o fluxo executa `npm test`, que valida a sintaxe dos scripts JavaScript, IDs duplicados, referências a elementos da interface e a presença dos controles essenciais.
