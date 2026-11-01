@@ -5,6 +5,7 @@
   "type": "commonjs",
   "description": "NotasVA 5.0.0 - aplicativo de anotações, escrita manual e desenho",
   "scripts": {
+    "test": "node scripts/test-ui.js",
     "build": "node scripts/prepare-web.js",
     "dev": "npx serve .",
     "cap:sync": "npm run build && npx cap sync android",
