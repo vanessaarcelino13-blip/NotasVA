@@ -3,7 +3,7 @@ const path = require('path');
 
 const root = path.resolve(__dirname, '..');
 const out = path.join(root, 'www');
-const files = ['index.html', 'manifest.webmanifest', 'sw.js', 'icon.svg', 'pdf-tools.js'];
+const files = ['index.html', 'manifest.webmanifest', 'sw.js', 'icon.svg', 'pdf-tools.js', 'dashboard.css', 'dashboard.js'];
 
 fs.mkdirSync(out, { recursive: true });
 for (const file of files) {
