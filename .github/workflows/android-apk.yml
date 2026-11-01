@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'index.html'
+      - 'index.html.gz.b64'
       - 'manifest.webmanifest'
       - 'sw.js'
       - 'icon.svg'
@@ -15,7 +16,7 @@ on:
       - '.github/workflows/android-apk.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -23,6 +24,22 @@ jobs:
     steps:
       - name: Baixar o código
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Aplicar interface v4 enviada
+        run: |
+          if [ -f index.html.gz.b64 ]; then
+            base64 -d index.html.gz.b64 | gzip -dc > index.html
+            rm index.html.gz.b64
+            sed -i "s/notasva-v2/notasva-v4/" sw.js
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add index.html index.html.gz.b64 sw.js
+            if ! git diff --cached --quiet; then
+              git commit -m "Atualiza interface NotasVA v4.1"
+              git push
+            fi
+          fi
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
