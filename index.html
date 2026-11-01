@@ -23,7 +23,7 @@
 <button class="icon-btn mobile-only" id="menuBtn" aria-label="Abrir notas">☰</button>
 <button class="icon-btn star-btn" id="favoriteBtn" title="Favoritar nota">☆</button><input class="title" id="title" value="Minha nota" aria-label="Título da nota">
 <span class="save" id="status">✓ Salvo</span>
-<div class="top-actions"><button class="icon-btn" id="undoBtn" title="Desfazer">↶</button><button class="icon-btn" id="redoBtn" title="Refazer">↷</button><button class="icon-btn" id="imageBtn" title="Inserir imagem">▧</button><button class="icon-btn" id="moreBtn" title="Mais opções">⋯</button></div>
+<div class="top-actions"><button class="icon-btn" id="undoBtn" title="Desfazer">↶</button><button class="icon-btn" id="redoBtn" title="Refazer">↷</button><button class="icon-btn" id="imageBtn" title="Inserir imagem">▧</button><button class="icon-btn" id="pdfBtn" title="Abrir e anotar PDF">▤</button><button class="icon-btn" id="moreBtn" title="Mais opções">⋯</button></div>
 </header>
 <section class="editor-area" id="editorArea"><div class="paper" id="paper"><div class="writing" id="writing" contenteditable="true" spellcheck="true"></div><canvas class="draw" id="draw"></canvas></div></section>
 <footer class="bottom-bar"><span>NotasVA • Suas ideias em um só lugar</span><span id="count">0 caracteres</span></footer>
@@ -149,4 +149,54 @@ $('tagNote').addEventListener('click',()=>{$('tagsDrawer').classList.toggle('sho
 $('backupBtn').addEventListener('click',()=>{const payload={version:41,createdAt:new Date().toISOString(),notes:window.NotasVA?.getNotes?.()||[],enhancements:allData()};const a=document.createElement('a'),url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));a.href=url;a.download='notasva-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);closePopups();toast('Backup criado')});
 $('restoreBtn').addEventListener('click',()=>$('restoreInput').click());$('restoreInput').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const p=JSON.parse(rd.result);if(!Array.isArray(p.notes)||!p.enhancements)throw Error();localStorage.setItem('notasva-notes-v2',JSON.stringify(p.notes));localStorage.setItem(STORE,JSON.stringify(p.enhancements));location.reload()}catch(err){toast('Backup inválido ou incompatível')} };rd.readAsText(f);e.target.value=''});
 $('title').addEventListener('change',persist);window.addEventListener('notasva:select',e=>loadNote(e.detail));window.addEventListener('notasva:beforechange',saveHistory);window.addEventListener('resize',renderObjects);loadNote(window.NotasVA?.getCurrent?.());
-})();</script></body></html>
+})();</script>
+<input type="file" id="pdfInput" accept="application/pdf,.pdf" hidden>
+<section class="pdf-modal" id="pdfModal" aria-hidden="true">
+  <header class="pdf-header">
+    <strong id="pdfTitle">Anotar PDF</strong>
+    <div class="pdf-header-actions">
+      <button type="button" id="pdfPrev" aria-label="Página anterior">‹</button>
+      <span id="pdfPageLabel">1 / 1</span>
+      <button type="button" id="pdfNext" aria-label="Próxima página">›</button>
+      <button type="button" id="pdfExport">Exportar PDF</button>
+      <button type="button" id="pdfClose" aria-label="Fechar">✕</button>
+    </div>
+  </header>
+  <div class="pdf-stage-wrap"><div class="pdf-stage" id="pdfStage"><canvas id="pdfPageCanvas"></canvas><canvas id="pdfInkCanvas"></canvas></div></div>
+  <footer class="pdf-tools">
+    <button type="button" data-pdf-mode="pen" class="selected">✎ Caneta</button>
+    <button type="button" data-pdf-mode="marker">▰ Marca-texto</button>
+    <button type="button" data-pdf-mode="eraser">⌫ Borracha</button>
+    <label>Cor <input type="color" id="pdfColor" value="#7956cf"></label>
+    <label>Espessura <input type="range" id="pdfWidth" min="1" max="14" value="3"></label>
+    <button type="button" id="pdfUndo">Desfazer</button>
+    <button type="button" id="pdfClear">Limpar página</button>
+    <span id="pdfStatus">PDF salvo neste dispositivo</span>
+  </footer>
+</section>
+<style>
+.pdf-modal{display:none;position:fixed;inset:0;z-index:100;background:#f1eff5;color:#252230;flex-direction:column}
+.pdf-modal.open{display:flex}
+.pdf-header{height:58px;flex-shrink:0;background:#252230;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px}
+.pdf-header strong{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pdf-header-actions{display:flex;align-items:center;gap:7px}
+.pdf-header-actions button,.pdf-tools button{border:0;border-radius:9px;padding:9px 12px;background:#eee8fb;color:#382c50;font-weight:650}
+.pdf-header-actions button{background:#4b3c65;color:#fff}
+.pdf-header-actions #pdfExport{background:#7956cf}
+#pdfPageLabel{font-size:12px;min-width:48px;text-align:center}
+.pdf-stage-wrap{flex:1;min-height:0;overflow:auto;padding:18px;display:flex;justify-content:center;align-items:flex-start}
+.pdf-stage{position:relative;flex:none;box-shadow:0 8px 30px #21172b24;background:white;line-height:0}
+.pdf-stage canvas{display:block;max-width:none}
+#pdfInkCanvas{position:absolute;left:0;top:0;touch-action:none}
+.pdf-tools{min-height:58px;display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;padding:8px;background:#fff;border-top:1px solid #e4dfeb}
+.pdf-tools button.selected{background:#7956cf;color:#fff}
+.pdf-tools label{display:flex;align-items:center;gap:5px;font-size:12px;color:#655d70}
+.pdf-tools input[type=color]{width:30px;height:28px;border:0;background:transparent;padding:0}
+.pdf-tools input[type=range]{width:75px;accent-color:#7956cf}
+#pdfStatus{font-size:11px;color:#858091}
+@media(max-width:700px){.pdf-header{padding:0 7px}.pdf-header strong{max-width:90px}.pdf-header-actions{gap:3px}.pdf-header-actions button{padding:8px}.pdf-stage-wrap{padding:8px}.pdf-tools{gap:5px}.pdf-tools button{padding:8px;font-size:11px}#pdfStatus{display:none}}
+</style>
+<script src="./vendor/pdf.min.js"></script>
+<script src="./vendor/pdf-lib.min.js"></script>
+<script src="./pdf-tools.js"></script>
+</body></html>
