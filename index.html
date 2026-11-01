@@ -106,7 +106,7 @@ $('exportPrint').addEventListener('click',()=>{closePopups();window.print()});
 $('duplicateNote').addEventListener('click',()=>{const copy=JSON.parse(JSON.stringify(current));copy.id=String(Date.now());copy.title=(copy.title||'Nota')+' (cópia)';notes.push(copy);selectNote(copy);save();closePopups();notify('Nota duplicada')});
 $('deleteNote').addEventListener('click',()=>{if(!current||!confirm('Excluir esta nota permanentemente?'))return;notes=notes.filter(n=>n.id!==current.id);if(!notes.length)notes.push(blank());selectNote(notes[notes.length-1]);save();closePopups();notify('Nota excluída')});
 
-document.addEventListener('pointerdown',e=>{if(!e.target.closest('.popup')&&!e.target.closest('#toolsBtn')&&!e.target.closest('#paperBtn')&&!e.target.closest('#moreBtn'))closePopups()});
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('.popup')&&!e.target.closest('#toolsBtn')&&!e.target.closest('#paperBtn')&&!e.target.closest('#layersBtn')&&!e.target.closest('#moreBtn'))closePopups()});
 window.addEventListener('resize',()=>{resizeCanvas();redraw()});
 window.NotasVA={getCurrent:()=>current,getNotes:()=>notes,save,redraw,};if(!notes.length)notes=[blank()];selectNote(notes[notes.length-1]);if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 })();
