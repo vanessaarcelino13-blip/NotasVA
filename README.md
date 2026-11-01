@@ -1,32 +1,44 @@
 # NotasVA
 
-Aplicativo de anotações, escrita manual e desenho, otimizado para telas Android e desktop.
+Aplicativo de anotações, escrita manual e desenho, com foco em Android.
 
-## Recursos da interface v4.1
+## Recursos existentes
 
 - Criar, pesquisar, duplicar e excluir notas.
-- Salvamento local automático.
+- Salvamento automático no armazenamento local do dispositivo.
 - Favoritar notas e organizar com etiquetas.
-- Texto editável e desenho por toque ou mouse.
-- Caneta, lápis, tinteiro, marca-texto e borracha.
-- Inserir e arrastar figurinhas, imagens, retângulos e setas.
+- Editor de texto.
+- Desenho por toque ou mouse com caneta, lápis, tinteiro, marca-texto e borracha.
+- Inserir e mover imagens, figurinhas, retângulos e setas.
 - Papéis branco, pautado, quadriculado, pontilhado, creme, escuro, azul técnico e kraft.
-- Desfazer e refazer ações em objetos.
-- Exportar notas em TXT ou PDF pela impressão.
+- Camadas de desenho.
+- Desfazer e refazer ações de desenho e objetos.
+- Exportar notas em TXT e imprimir/salvar em PDF.
 - Criar e restaurar backup JSON.
-- Cache atualizado para carregar a interface nova no dispositivo.
 
 ## Executar no navegador
 
 Abra `index.html` em um navegador moderno.
 
-## Gerar APK Android
+## Gerar APK pelo GitHub
 
-O GitHub Actions compila automaticamente o APK quando os arquivos da aplicação são atualizados na branch `main`.
+O workflow **Gerar APK do NotasVA** é executado automaticamente quando há um push na branch `main`. Também pode ser iniciado manualmente.
 
 1. Abra a aba **Actions** do repositório.
-2. Entre na execução **Gerar APK do NotasVA**.
-3. Aguarde a conclusão da compilação.
-4. Baixe o artefato **NotasVA-APK** na seção Artifacts.
+2. Selecione **Gerar APK do NotasVA**.
+3. Abra a execução mais recente.
+4. Aguarde o job **Compilar aplicativo Android** terminar com sucesso.
+5. Baixe **NotasVA-APK** na seção **Artifacts**.
 
-O projeto usa Capacitor com o identificador Android `br.com.notasva.app`.
+O APK gerado é uma versão de depuração (debug), adequada para instalação e testes.
+
+## Tecnologias
+
+- HTML, CSS e JavaScript.
+- Capacitor 6 para empacotar a aplicação web como aplicativo Android.
+- GitHub Actions para compilar o APK.
+- Identificador Android: `br.com.notasva.app`.
+
+## Dados e privacidade
+
+As notas são armazenadas localmente no dispositivo/navegador. Faça backups JSON regularmente para evitar perder seus dados ao limpar os dados do aplicativo ou trocar de aparelho.
